@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Hello = () => <h1>Hello</h1>
+import Home from './components/home/Home'
 
-ReactDOM.render(<Hello />, document.getElementById('root'));
+ReactDOM.render(<Home />, document.getElementById('root'));
