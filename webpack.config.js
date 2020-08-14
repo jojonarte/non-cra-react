@@ -1,7 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+const isDev = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   entry: {
@@ -20,6 +23,10 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: isDev ? '[name].css' : '[name].[has].css',
+      chunkFilename: isDev ? '[name].css' : '[name].[has].css'
+    }),
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({ template: './index.html' })
@@ -29,7 +36,17 @@ module.exports = {
     rules: [
       {
         test: /\.css/,
-        use: ['style-loader', 'css-loader']
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              esModule: true,
+              hmr: isDev,
+            }
+          },
+          'css-loader',
+          // 'style-loader',
+        ]
       },
       {
         test: /\.js$/,
