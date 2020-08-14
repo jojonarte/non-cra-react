@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
@@ -13,13 +14,17 @@ module.exports = {
   devServer: {
     hot: true,
     compress: true,
-    contentBase: path.join(__dirname, 'dist')
+    contentBase: path.join(__dirname, 'dist'),
+    open: 'Google Chrome',
+    port: 9081
   },
-  watch: true,
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   plugins: [
+    new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({ template: './index.html' })
   ],
+  watch: true,
   module: {
     rules: [
       {
@@ -36,7 +41,9 @@ module.exports = {
   resolve: {
     extensions: [
       '.js',
-      '.jsx'
+      '.jsx',
+      '.css',
+      '.scss'
     ]
   }
 }
